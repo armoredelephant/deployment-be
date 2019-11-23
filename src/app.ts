@@ -3,14 +3,14 @@ import { createConnection, getConnectionOptions } from 'typeorm'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
-import { MovieResolver } from './resolvers/MovieResolver'
+import { TechResolver } from './resolvers/TechResolver'
+import { DeploymentResolver } from './resolvers/DeploymentResolver'
 /**
  * Initializing our apps
  * Creating a schema with buildSchema and feeding to apollo
  * Applying middleware to Apollo
  * Express listening on port
  */
-import { TechResolver } from './resolvers/TechResolver'
 ;(async (): Promise<void> => {
   const app = express()
 
@@ -22,7 +22,7 @@ import { TechResolver } from './resolvers/TechResolver'
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [MovieResolver, TechResolver],
+      resolvers: [DeploymentResolver, TechResolver],
     }),
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     context: ({ req, res }) => ({ req, res }),

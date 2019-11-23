@@ -11,6 +11,7 @@ import { ObjectType, Int, Field } from 'type-graphql'
  * product!
  * modelType!
  * serialNumber!
+ * timeStamp!
  */
 
 @ObjectType()
@@ -39,4 +40,8 @@ export class Deployment extends BaseEntity {
   @Field()
   @Column({ nullable: false })
   serialNumber: string
+
+  @Field()
+  @Column({ nullable: false })
+  timeStamp: string
 }
