@@ -2,9 +2,7 @@ import 'reflect-metadata';
 import { createConnection, getConnectionOptions } from 'typeorm';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { buildSchema } from 'type-graphql';
-import { TechResolver } from './resolvers/TechResolver';
-import { DeploymentResolver } from './resolvers/DeploymentResolver';
+import { createSchema } from './utils/createSchema';
 /**
  * Initializing our apps
  * Creating a schema with buildSchema and feeding to apollo
@@ -21,9 +19,7 @@ import { DeploymentResolver } from './resolvers/DeploymentResolver';
     await createConnection({ ...options, name: 'default' });
 
     const apolloServer = new ApolloServer({
-        schema: await buildSchema({
-            resolvers: [DeploymentResolver, TechResolver],
-        }),
+        schema: await createSchema(), // resolvers are in createSchema util
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         context: ({ req, res }) => ({ req, res }),
     });

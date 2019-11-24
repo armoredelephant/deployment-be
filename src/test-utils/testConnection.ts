@@ -3,20 +3,16 @@ import { createConnection, Connection } from 'typeorm';
 /**
  * creating a typeorm test connection
  */
-export const testConn = async (drop = false): Promise<Connection> => {
+export const connect = async (drop = false): Promise<Connection> => {
     return await createConnection({
-        name: 'development',
+        name: 'default',
         type: 'sqlite',
-        database: 'testdatabase.sqlite',
+        database: 'test-database.sqlite',
         synchronize: drop,
         dropSchema: drop,
         entities: ['src/entity/**/*.ts'],
-        migrations: ['src/migration/**/*.ts'],
-        subscribers: ['src/subscriber/**/*.ts'],
         cli: {
             entitiesDir: 'src/entity',
-            migrationsDir: 'src/migration',
-            subscribersDir: 'src/subscriber',
         },
     });
 };
