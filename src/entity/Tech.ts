@@ -1,5 +1,5 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import { ObjectType, Field, Int } from 'type-graphql'
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ObjectType, Field, Int } from 'type-graphql';
 
 /**
  * Tech Entity
@@ -11,11 +11,11 @@ import { ObjectType, Field, Int } from 'type-graphql'
 @ObjectType()
 @Entity()
 export class Tech extends BaseEntity {
-  @Field(() => Int)
-  @PrimaryGeneratedColumn()
-  id: number
+    @Field(() => Int)
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Field()
-  @Column({ nullable: false })
-  name: string
+    @Field()
+    @Column({ nullable: false })
+    name: string;
 }

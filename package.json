@@ -1,42 +1,43 @@
 {
-  "name": "apollostarter",
-  "version": "1.0.0",
-  "main": "src/app.ts",
-  "author": "Keith Alleman",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}",
-    "test": "jest --runInBand --coverage",
-    "build": "tsc",
-    "start": "nodemon"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.2",
-    "@types/jest": "^24.0.23",
-    "@types/node": "^12.12.11",
-    "@typescript-eslint/eslint-plugin": "^2.8.0",
-    "@typescript-eslint/parser": "^2.8.0",
-    "eslint": "^6.6.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^23.0.4",
-    "eslint-plugin-prettier": "^3.1.1",
-    "jest": "^24.9.0",
-    "nodemon": "^1.19.4",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1",
-    "ts-jest": "^24.1.0",
-    "ts-node": "^8.5.2",
-    "typescript": "^3.7.2"
-  },
-  "dependencies": {
-    "apollo-server-express": "^2.9.9",
-    "express": "^4.17.1",
-    "graphql": "^14.5.8",
-    "reflect-metadata": "^0.1.13",
-    "sqlite3": "^4.1.0",
-    "type-graphql": "^0.17.5",
-    "typeorm": "^0.2.20"
-  }
+    "name": "apollostarter",
+    "version": "1.0.0",
+    "main": "src/app.ts",
+    "author": "Keith Alleman",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "lint:fix": "eslint --fix ./src/**/*.{ts,tsx}",
+        "test": "yarn run db:test && jest --runInBand --coverage",
+        "db:test": "ts-node ./src/test-utils/setup.ts",
+        "build": "tsc",
+        "start": "nodemon"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.2",
+        "@types/jest": "^24.0.23",
+        "@types/node": "^12.12.11",
+        "@typescript-eslint/eslint-plugin": "^2.8.0",
+        "@typescript-eslint/parser": "^2.8.0",
+        "eslint": "^6.6.0",
+        "eslint-config-prettier": "^6.7.0",
+        "eslint-plugin-import": "^2.18.2",
+        "eslint-plugin-jest": "^23.0.4",
+        "eslint-plugin-prettier": "^3.1.1",
+        "jest": "^24.9.0",
+        "nodemon": "^1.19.4",
+        "prettier": "^1.19.1",
+        "pretty-quick": "^2.0.1",
+        "ts-jest": "^24.1.0",
+        "ts-node": "^8.5.2",
+        "typescript": "^3.7.2"
+    },
+    "dependencies": {
+        "apollo-server-express": "^2.9.9",
+        "express": "^4.17.1",
+        "graphql": "^14.5.8",
+        "reflect-metadata": "^0.1.13",
+        "sqlite3": "^4.1.0",
+        "type-graphql": "^0.17.5",
+        "typeorm": "^0.2.20"
+    }
 }

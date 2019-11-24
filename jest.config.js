@@ -1,15 +1,15 @@
 module.exports = {
-  testEnvironment: 'node',
-  roots: ['<rootDir>/src'],
-  transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-  },
-  globals: {
-    'ts-jest': {
-      diagnostics: {
-        warnOnly: true,
-      },
+    testEnvironment: 'node',
+    roots: ['<rootDir>/src'],
+    transform: {
+        '^.+\\.tsx?$': 'ts-jest',
     },
-  },
-  testPathIgnorePatterns: ['<rootDir>/src/app.ts'],
-}
+    globals: {
+        'ts-jest': {
+            diagnostics: {
+                warnOnly: true,
+            },
+        },
+    },
+    testPathIgnorePatterns: ['<rootDir>/src/app.ts'],
+};
