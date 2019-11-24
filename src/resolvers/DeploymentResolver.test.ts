@@ -4,6 +4,8 @@ import { gCall } from '../test-utils/gCall';
 import { createDeploymentMutation } from '../test-utils/testMutations';
 import { createSchema } from '../utils/createSchema';
 import { GraphQLSchema } from 'graphql';
+import faker from 'faker';
+import { Deployment } from '../entity/Deployment';
 
 let conn: Connection;
 let testSchema: GraphQLSchema;
@@ -17,22 +19,68 @@ afterAll(async () => {
 });
 
 describe('Deployment Resolver', () => {
+    /**
+     * testing if we can create a deployment in db
+     */
     it('create deployment', async () => {
-        console.log(
-            await gCall({
-                schema: testSchema,
-                source: createDeploymentMutation,
-                variableValues: {
-                    data: {
-                        tech: 'Keith',
-                        endUser: 'Salleena',
-                        product: 'Test',
-                        modelType: 'Test',
-                        serialNumber: 'test',
-                        timeStamp: 'now',
-                    },
+        const deploymentData = {
+            tech: faker.name.firstName(),
+            endUser: faker.name.firstName(),
+            product: faker.name.firstName(),
+            modelType: faker.name.firstName(),
+            serialNumber: faker.name.firstName(),
+            timeStamp: faker.name.firstName(),
+        };
+
+        const response = await gCall({
+            schema: testSchema,
+            source: createDeploymentMutation,
+            variableValues: {
+                data: deploymentData,
+            },
+        });
+
+        expect(response).toMatchObject({
+            data: {
+                createDeployment: {
+                    id: 1,
+                    tech: deploymentData.tech,
+                    endUser: deploymentData.endUser,
+                    product: deploymentData.product,
+                    modelType: deploymentData.modelType,
+                    serialNumber: deploymentData.serialNumber,
+                    timeStamp: deploymentData.timeStamp,
                 },
-            })
-        );
+            },
+        });
+        const dbDeployment = await Deployment.findOne({
+            where: { tech: deploymentData.tech },
+        });
+        expect(dbDeployment).toBeDefined();
+    });
+
+    /**
+     * testing if GraphQL errors[] is defined when ran with missing fields
+     */
+    it('field validation testing createDeployment', async () => {
+        const invalidDeploymentData = {
+            tech: faker.name.firstName(),
+            endUser: faker.name.firstName(),
+            product: faker.name.firstName(),
+            modelType: faker.name.firstName(),
+            serialNumber: faker.name.firstName(),
+        };
+
+        const results = await gCall({
+            schema: testSchema,
+            source: createDeploymentMutation,
+            variableValues: {
+                data: invalidDeploymentData,
+            },
+        });
+
+        const error = await results.errors[0];
+        console.log(error);
+        expect(error).toBeDefined();
     });
 });

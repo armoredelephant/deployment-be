@@ -1,7 +1,11 @@
 import 'reflect-metadata';
 import { createConnection, getConnectionOptions } from 'typeorm';
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import {
+    ApolloServer,
+    ValidationError,
+    UserInputError,
+} from 'apollo-server-express';
 import { createSchema } from './utils/createSchema';
 /**
  * Initializing our apps
@@ -19,9 +23,17 @@ import { createSchema } from './utils/createSchema';
     await createConnection({ ...options, name: 'default' });
 
     const apolloServer = new ApolloServer({
-        schema: await createSchema(), // resolvers are in createSchema util
+        schema: await createSchema(),
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         context: ({ req, res }) => ({ req, res }),
+        formatError: (err: Error): Error => {
+            if (err.message.startsWith('Field ')) {
+                return new ValidationError('Missing field in mutation.');
+            }
+            if (err.message.startsWith('Expected type '))
+                return new UserInputError('Invalid type for given input.');
+            return err;
+        },
     });
 
     apolloServer.applyMiddleware({ app, cors: false });

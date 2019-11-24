@@ -16,9 +16,14 @@ export const gCall = async ({
     source,
     variableValues,
 }: Options): Promise<ExecutionResult<ExecutionResultDataDefault>> => {
-    return graphql({
+    const results = await graphql({
         schema,
         source,
         variableValues,
     });
+    const data = {
+        errors: await results.errors,
+        data: await results.data,
+    };
+    return data;
 };

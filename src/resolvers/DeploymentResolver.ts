@@ -63,9 +63,8 @@ export class DeploymentResolver {
     async createDeployment(
         @Arg('deployment', () => DeploymentInput)
         deployment: DeploymentInput
-    ): Promise<Deployment> {
-        const createdDeployment = await Deployment.create(deployment).save();
-        return createdDeployment;
+    ): Promise<Deployment | void> {
+        return await Deployment.create(deployment).save();
     }
     /**
      * query to find all deployments
