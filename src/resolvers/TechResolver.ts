@@ -8,12 +8,24 @@ import {
     Query,
     Args,
     ObjectType,
+    InputType,
 } from 'type-graphql';
 import { Tech } from '../entity/Tech';
+import {
+    InternalError,
+    EntityNotCreated,
+    ResourceNotFound,
+} from '../utils/customErrors';
+
+@InputType()
+export class TechInput {
+    @Field()
+    name: string;
+}
 
 @ObjectType()
 @ArgsType()
-class GetTechArgs {
+export class GetTechArgs {
     @Field(() => Int, { nullable: true })
     id?: number;
 
@@ -41,33 +53,57 @@ export class TechResolver {
      */
     @Mutation(() => Tech)
     async createTech(@Arg('name') name: string): Promise<Tech> {
-        const createdTech = await Tech.create({ name }).save();
-        return createdTech;
+        let tech;
+
+        try {
+            tech = await Tech.create({ name }).save();
+        } catch (error) {
+            throw new InternalError(error);
+        }
+
+        if (!tech) throw new EntityNotCreated('tech', { query: { name } });
+        return tech;
     }
     /**
      * mutation to delete a tech by name or id
+     * will check if tech exists or fail
      */
     @Mutation(() => Boolean)
     async deleteTech(@Args() { id, name }: RemoveTechArgs): Promise<boolean> {
-        await Tech.delete({ id, name });
-        return true;
+        try {
+            await Tech.findOneOrFail({ id, name });
+        } catch (error) {
+            throw new ResourceNotFound('tech', { query: { name } });
+        }
+
+        try {
+            await Tech.delete({ id, name });
+            return true;
+        } catch (error) {
+            throw new InternalError(error);
+        }
     }
     /**
      * mutation to update tech
+     * will check if Tech exists first or fail
      */
     @Mutation(() => Boolean)
     async updateTech(
         @Arg('id', () => Int) id: number,
         @Arg('newName') newName: string
     ): Promise<boolean> {
-        const found = await Tech.findOne({ id });
-
-        if (!found) {
-            throw new Error('No tech was found with this id.');
+        try {
+            await Tech.findOneOrFail({ id });
+        } catch (error) {
+            throw new ResourceNotFound('tech');
         }
 
-        await Tech.update({ id }, { name: newName });
-        return true;
+        try {
+            await Tech.update({ id }, { name: newName });
+            return true;
+        } catch (error) {
+            throw new InternalError(error);
+        }
     }
     /**
      * query to find tech by name or id
@@ -84,7 +120,19 @@ export class TechResolver {
         if (name) {
             options.name = name;
         }
-        return await Tech.find(options);
+
+        let tech;
+
+        try {
+            tech = await Tech.find(options);
+        } catch (error) {
+            throw new InternalError(error);
+        }
+
+        if (tech.length === 0)
+            throw new ResourceNotFound('tech', { query: { id, name } });
+
+        return tech;
     }
 
     /**
@@ -92,6 +140,10 @@ export class TechResolver {
      */
     @Query(() => [Tech])
     async findAllTechs(): Promise<Tech[]> {
-        return await Tech.find();
+        try {
+            return await Tech.find();
+        } catch (error) {
+            throw new InternalError(error);
+        }
     }
 }

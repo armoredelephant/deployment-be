@@ -10,9 +10,14 @@ import {
     ObjectType,
 } from 'type-graphql';
 import { Deployment } from '../entity/Deployment';
+import {
+    EntityNotCreated,
+    ResourceNotFound,
+    InternalError,
+} from '../utils/customErrors';
 
 @InputType()
-class DeploymentInput {
+export class DeploymentInput {
     @Field()
     tech: string;
 
@@ -34,7 +39,7 @@ class DeploymentInput {
 
 @ObjectType()
 @ArgsType()
-class DeploymentArgsType {
+export class DeploymentArgsType {
     @Field({ nullable: true })
     tech?: string;
 
@@ -64,14 +69,28 @@ export class DeploymentResolver {
         @Arg('deployment', () => DeploymentInput)
         deployment: DeploymentInput
     ): Promise<Deployment | void> {
-        return await Deployment.create(deployment).save();
+        let newDeployment;
+
+        try {
+            newDeployment = await Deployment.create(deployment).save();
+        } catch (error) {
+            throw new InternalError(error);
+        }
+
+        if (!newDeployment)
+            throw new EntityNotCreated('deployment', { query: deployment });
+        return newDeployment;
     }
     /**
      * query to find all deployments
      */
     @Query(() => [Deployment])
     async findDeployments(): Promise<Deployment[]> {
-        return await Deployment.find();
+        try {
+            return await Deployment.find();
+        } catch (error) {
+            throw new InternalError(error);
+        }
     }
     /**
      * query for finding each tech by any field other than id
@@ -109,7 +128,18 @@ export class DeploymentResolver {
             options.timeStamp = timeStamp;
         }
 
-        return await Deployment.find(options);
+        let deployment;
+
+        try {
+            deployment = await Deployment.find(options);
+        } catch (error) {
+            throw new InternalError(error);
+        }
+
+        if (deployment.length === 0)
+            throw new ResourceNotFound('deployment', { query: options });
+
+        return deployment;
     }
 }
 /**
