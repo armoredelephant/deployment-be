@@ -10,6 +10,23 @@ import { Deployment } from '../entity/Deployment';
 let conn: Connection;
 let testSchema: GraphQLSchema;
 
+const invalidDeploymentData = {
+    tech: faker.name.firstName(),
+    endUser: faker.name.firstName(),
+    product: faker.name.firstName(),
+    modelType: faker.name.firstName(),
+    serialNumber: faker.name.firstName(),
+};
+
+const deploymentData = {
+    tech: faker.name.firstName(),
+    endUser: faker.name.firstName(),
+    product: faker.name.firstName(),
+    modelType: faker.name.firstName(),
+    serialNumber: faker.name.firstName(),
+    timeStamp: faker.name.firstName(),
+};
+
 beforeAll(async () => {
     conn = await connect();
     testSchema = await createSchema();
@@ -23,15 +40,6 @@ describe('Deployment Resolver', () => {
      * testing if we can create a deployment in db
      */
     it('create deployment', async () => {
-        const deploymentData = {
-            tech: faker.name.firstName(),
-            endUser: faker.name.firstName(),
-            product: faker.name.firstName(),
-            modelType: faker.name.firstName(),
-            serialNumber: faker.name.firstName(),
-            timeStamp: faker.name.firstName(),
-        };
-
         const response = await gCall({
             schema: testSchema,
             source: createDeploymentMutation,
@@ -63,14 +71,6 @@ describe('Deployment Resolver', () => {
      * testing if GraphQL errors[] is defined when ran with missing fields
      */
     it('field validation testing createDeployment', async () => {
-        const invalidDeploymentData = {
-            tech: faker.name.firstName(),
-            endUser: faker.name.firstName(),
-            product: faker.name.firstName(),
-            modelType: faker.name.firstName(),
-            serialNumber: faker.name.firstName(),
-        };
-
         const results = await gCall({
             schema: testSchema,
             source: createDeploymentMutation,
@@ -79,8 +79,8 @@ describe('Deployment Resolver', () => {
             },
         });
 
-        const error = await results.errors[0];
-        console.log(error);
-        expect(error).toBeDefined();
+        if (results.errors) {
+            expect(results.errors.length).toBeGreaterThan(0);
+        }
     });
 });
