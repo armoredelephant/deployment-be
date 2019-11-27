@@ -1,5 +1,5 @@
 export const createDeploymentMutation = `
-    mutation CreateDeployment ($data: DeploymentInput!){
+    mutation CreateDeployment ($data: DeploymentInput!) {
         createDeployment (deployment: $data) {
         id
         tech
@@ -11,3 +11,9 @@ export const createDeploymentMutation = `
         }
     }
 `;
+
+// export const createTechMutation = `
+//     mutation CreateTech ($data: TechInput!) {
+//         createTech ()
+//     }
+// `;
