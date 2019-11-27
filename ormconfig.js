@@ -3,7 +3,7 @@ module.exports = [
         name: 'development',
         type: 'sqlite',
         database: 'database.sqlite',
-        synchronize: false,
+        synchronize: true,
         logging: true,
         entities: ['src/entity/**/*.ts'],
         migrations: ['src/migration/**/*.ts'],
