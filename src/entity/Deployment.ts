@@ -1,5 +1,12 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+    Entity,
+    BaseEntity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+} from 'typeorm';
 import { ObjectType, Int, Field } from 'type-graphql';
+import { Tech } from './Tech';
 
 /**
  * Our deployment entity
@@ -22,7 +29,10 @@ export class Deployment extends BaseEntity {
     id: number;
 
     @Field()
-    @Column({ nullable: false })
+    @ManyToOne(
+        () => Tech,
+        tech => tech.name
+    )
     tech: string;
 
     @Field()

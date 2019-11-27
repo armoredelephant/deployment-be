@@ -1,5 +1,6 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ObjectType, Field, Int } from 'type-graphql';
+import { Deployment } from './Deployment';
 
 /**
  * Tech Entity
@@ -16,6 +17,10 @@ export class Tech extends BaseEntity {
     id: number;
 
     @Field()
-    @Column({ nullable: false })
+    @OneToMany(
+        () => Deployment,
+        deployment => deployment.tech,
+        { nullable: false }
+    )
     name: string;
 }
