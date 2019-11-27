@@ -6,6 +6,10 @@ import { createSchema } from '../utils/createSchema';
 import { GraphQLSchema } from 'graphql';
 import faker from 'faker';
 import { Deployment } from '../entity/Deployment';
+import {
+    findDeploymentQuery,
+    findDeploymentsByFieldQuery,
+} from '../test-utils/testQueries';
 
 let conn: Connection;
 let testSchema: GraphQLSchema;
@@ -25,6 +29,15 @@ const deploymentData = {
     modelType: faker.name.firstName(),
     serialNumber: faker.name.firstName(),
     timeStamp: faker.name.firstName(),
+};
+
+const testData = {
+    tech: 'Keith',
+    endUser: 'Salleena',
+    product: 'Test',
+    modelType: 'Test',
+    serialNumber: 'Test',
+    timeStamp: 'Test',
 };
 
 beforeAll(async () => {
@@ -82,5 +95,50 @@ describe('Deployment Resolver', () => {
         if (results.errors) {
             expect(results.errors.length).toBeGreaterThan(0);
         }
+    });
+
+    /**
+     * testing findDeployment
+     */
+    it('findDeployment returns query', async () => {
+        await gCall({
+            schema: testSchema,
+            source: createDeploymentMutation,
+            variableValues: {
+                data: deploymentData,
+            },
+        });
+        const foundDeployments = await gCall({
+            schema: testSchema,
+            source: findDeploymentQuery,
+        });
+        expect(foundDeployments).toBeDefined();
+    });
+
+    /**
+     * testing findDeploymentsByField
+     */
+    it('findDeploymentsByField works with each field', async () => {
+        await gCall({
+            schema: testSchema,
+            source: createDeploymentMutation,
+            variableValues: {
+                data: testData,
+            },
+        });
+        const foundDeployments = await gCall({
+            schema: testSchema,
+            source: findDeploymentsByFieldQuery,
+        });
+        expect(foundDeployments).toMatchObject({
+            data: {
+                findDeploymentsByField: [
+                    {
+                        id: 3,
+                        tech: 'Keith',
+                    },
+                ],
+            },
+        });
     });
 });
