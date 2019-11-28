@@ -8,6 +8,7 @@ import {
     ArgsType,
     Args,
     ObjectType,
+    ID,
 } from 'type-graphql';
 import { Deployment } from '../entity/Deployment';
 import {
@@ -19,7 +20,7 @@ import {
 @InputType()
 export class DeploymentInput {
     @Field()
-    tech: string;
+    techName: string;
 
     @Field()
     endUser: string;
@@ -35,13 +36,16 @@ export class DeploymentInput {
 
     @Field()
     timeStamp: string;
+
+    @Field(() => ID)
+    techId?: number;
 }
 
 @ObjectType()
 @ArgsType()
 export class DeploymentArgsType {
     @Field({ nullable: true })
-    tech?: string;
+    techName?: string;
 
     @Field({ nullable: true })
     endUser?: string;
@@ -57,6 +61,9 @@ export class DeploymentArgsType {
 
     @Field({ nullable: true })
     timeStamp?: string;
+
+    @Field({ nullable: true })
+    techId?: number;
 }
 
 @Resolver()
@@ -70,7 +77,6 @@ export class DeploymentResolver {
         deployment: DeploymentInput
     ): Promise<Deployment | void> {
         let newDeployment;
-
         try {
             newDeployment = await Deployment.create(deployment).save();
         } catch (error) {
@@ -93,24 +99,25 @@ export class DeploymentResolver {
         }
     }
     /**
-     * query for finding each tech by any field other than id
+     * query for finding each techName by any field other than id
      */
     @Query(() => [Deployment])
     async findDeploymentsByField(
         @Args({ validate: false })
         {
-            tech,
+            techName,
             endUser,
             product,
             modelType,
             serialNumber,
             timeStamp,
+            techId,
         }: DeploymentArgsType
     ): Promise<Deployment[] | undefined> {
         const options: DeploymentArgsType = {};
 
-        if (tech) {
-            options.tech = tech;
+        if (techName) {
+            options.techName = techName;
         }
         if (endUser) {
             options.endUser = endUser;
@@ -126,6 +133,9 @@ export class DeploymentResolver {
         }
         if (timeStamp) {
             options.timeStamp = timeStamp;
+        }
+        if (techId) {
+            options.techId = techId;
         }
 
         let deployment;

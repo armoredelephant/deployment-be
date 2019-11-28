@@ -1,7 +1,10 @@
 import { Connection } from 'typeorm';
 import { connect } from '../test-utils/testConnection';
 import { gCall } from '../test-utils/gCall';
-import { createDeploymentMutation } from '../test-utils/testMutations';
+import {
+    createDeploymentMutation,
+    createTechMutation,
+} from '../test-utils/testMutations';
 import { createSchema } from '../utils/createSchema';
 import { GraphQLSchema } from 'graphql';
 import faker from 'faker';
@@ -15,7 +18,7 @@ let conn: Connection;
 let testSchema: GraphQLSchema;
 
 const invalidDeploymentData = {
-    tech: faker.name.firstName(),
+    techName: faker.name.firstName(),
     endUser: faker.name.firstName(),
     product: faker.name.firstName(),
     modelType: faker.name.firstName(),
@@ -23,26 +26,35 @@ const invalidDeploymentData = {
 };
 
 const deploymentData = {
-    tech: faker.name.firstName(),
+    techName: 'Keith Alleman',
     endUser: faker.name.firstName(),
     product: faker.name.firstName(),
     modelType: faker.name.firstName(),
     serialNumber: faker.name.firstName(),
     timeStamp: faker.name.firstName(),
+    techId: 1,
 };
 
 const testData = {
-    tech: 'Keith',
+    techName: 'Keith Alleman',
     endUser: 'Salleena',
     product: 'Test',
     modelType: 'Test',
     serialNumber: 'Test',
     timeStamp: 'Test',
+    techId: 1,
 };
 
 beforeAll(async () => {
     conn = await connect();
     testSchema = await createSchema();
+    await gCall({
+        schema: testSchema,
+        source: createTechMutation,
+        variableValues: {
+            data: 'Keith Alleman',
+        },
+    });
 });
 afterAll(async () => {
     await conn.close();
@@ -60,22 +72,22 @@ describe('Deployment Resolver', () => {
                 data: deploymentData,
             },
         });
-
         expect(response).toMatchObject({
             data: {
                 createDeployment: {
                     id: 1,
-                    tech: deploymentData.tech,
+                    techName: deploymentData.techName,
                     endUser: deploymentData.endUser,
                     product: deploymentData.product,
                     modelType: deploymentData.modelType,
                     serialNumber: deploymentData.serialNumber,
                     timeStamp: deploymentData.timeStamp,
+                    techId: 1,
                 },
             },
         });
         const dbDeployment = await Deployment.findOne({
-            where: { tech: deploymentData.tech },
+            where: { techName: deploymentData.techName },
         });
         expect(dbDeployment).toBeDefined();
     });
@@ -135,7 +147,7 @@ describe('Deployment Resolver', () => {
                 findDeploymentsByField: [
                     {
                         id: 3,
-                        tech: 'Keith',
+                        techName: 'Keith Alleman',
                     },
                 ],
             },

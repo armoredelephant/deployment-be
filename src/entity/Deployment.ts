@@ -1,5 +1,13 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+    Entity,
+    BaseEntity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    JoinColumn,
+} from 'typeorm';
 import { ObjectType, Int, Field } from 'type-graphql';
+import { Tech } from './Tech';
 
 /**
  * Our deployment entity
@@ -23,10 +31,6 @@ export class Deployment extends BaseEntity {
 
     @Field()
     @Column({ nullable: false })
-    tech: string;
-
-    @Field()
-    @Column({ nullable: false })
     endUser: string;
 
     @Field()
@@ -44,4 +48,18 @@ export class Deployment extends BaseEntity {
     @Field()
     @Column({ nullable: false })
     timeStamp: string;
+
+    @Field()
+    @Column({ nullable: false })
+    techName: string;
+
+    @Field()
+    @Column()
+    techId: number;
+    @ManyToOne(
+        () => Tech,
+        tech => tech.deployments
+    )
+    @JoinColumn({ name: 'techId' })
+    tech: Tech;
 }

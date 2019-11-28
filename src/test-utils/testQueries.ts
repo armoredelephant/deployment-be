@@ -2,21 +2,22 @@ export const findDeploymentQuery = `
     query {
         findDeployments {
         id
-        tech
+        techName
         endUser
         product
         modelType
         serialNumber
         timeStamp
+        techId
         }
     }
 `;
 
 export const findDeploymentsByFieldQuery = `
     query {
-        findDeploymentsByField (tech: "Keith" endUser: "Salleena" product: "Test" modelType: "Test" serialNumber: "Test" timeStamp: "Test") {
+        findDeploymentsByField (techName: "Keith Alleman" endUser: "Salleena" product: "Test" modelType: "Test" serialNumber: "Test" timeStamp: "Test" techId: 1) {
         id
-        tech
+        techName
         }
     }
 `;

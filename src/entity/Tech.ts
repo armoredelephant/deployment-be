@@ -1,5 +1,12 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+    Entity,
+    BaseEntity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToMany,
+} from 'typeorm';
 import { ObjectType, Field, Int } from 'type-graphql';
+import { Deployment } from './Deployment';
 
 /**
  * Tech Entity
@@ -18,4 +25,15 @@ export class Tech extends BaseEntity {
     @Field()
     @Column({ nullable: false })
     name: string;
+
+    @OneToMany(
+        () => Deployment,
+        deployment => deployment.tech
+    )
+    deployments: Deployment[];
 }
+
+/**
+ * OneToMany(() => Note, note => note.owner)
+ * notes: Note[];
+ */
