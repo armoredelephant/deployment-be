@@ -9,6 +9,7 @@ export const createDeploymentMutation = `
         serialNumber
         timeStamp
         techId
+        ticketNumber
         }
     }
 `;

@@ -32,6 +32,7 @@ const deploymentData = {
     serialNumber: 'Test',
     timeStamp: 'Test',
     techId: 1,
+    ticketNumber: 111111,
 };
 
 let conn: Connection;

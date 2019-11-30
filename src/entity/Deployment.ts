@@ -53,6 +53,10 @@ export class Deployment extends BaseEntity {
     @Column({ nullable: false })
     techName: string;
 
+    @Field(() => Int)
+    @Column({ nullable: false })
+    ticketNumber: number;
+
     @Field()
     @Column()
     techId: number;

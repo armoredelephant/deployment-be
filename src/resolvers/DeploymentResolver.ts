@@ -9,6 +9,7 @@ import {
     Args,
     ObjectType,
     ID,
+    Int,
 } from 'type-graphql';
 import { Deployment } from '../entity/Deployment';
 import {
@@ -37,6 +38,9 @@ export class DeploymentInput {
     @Field()
     timeStamp: string;
 
+    @Field(() => Int)
+    ticketNumber: number;
+
     @Field(() => ID)
     techId?: number;
 }
@@ -64,6 +68,9 @@ export class DeploymentArgsType {
 
     @Field({ nullable: true })
     techId?: number;
+
+    @Field({ nullable: true })
+    ticketNumber?: number;
 }
 
 @Resolver()
@@ -112,6 +119,7 @@ export class DeploymentResolver {
             serialNumber,
             timeStamp,
             techId,
+            ticketNumber,
         }: DeploymentArgsType
     ): Promise<Deployment[] | undefined> {
         const options: DeploymentArgsType = {};
@@ -136,6 +144,10 @@ export class DeploymentResolver {
         }
         if (techId) {
             options.techId = techId;
+        }
+
+        if (ticketNumber) {
+            options.ticketNumber = ticketNumber;
         }
 
         let deployment;
