@@ -21,3 +21,15 @@ export const createTechMutation = `
         }
     }
 `;
+
+export const deleteTechMutation = `
+    mutation DeleteTech($name: String! $id: Int!) {
+        deleteTech (id: $id name: $name)
+    }
+`;
+
+export const updateTechMutation = `
+    mutation UpdateTech($id: Int! $name: String!) {
+        updateTech (id: $id newName: $name)
+    }
+`;

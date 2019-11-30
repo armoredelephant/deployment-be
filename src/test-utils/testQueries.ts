@@ -21,3 +21,21 @@ export const findDeploymentsByFieldQuery = `
         }
     }
 `;
+
+export const findTechQuery = `
+    query FindTechQuery ($id: Int! $name: String!) {
+        findTech (id: $id name: $name) {
+            id
+            name
+        }
+    }
+`;
+
+export const findAllTechsQuery = `
+    query {
+        findAllTechs {
+            id
+            name
+        }
+    }
+`;

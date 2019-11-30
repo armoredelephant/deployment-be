@@ -1,3 +1,3 @@
 import { connect } from './testConnection';
 
-connect(true).then(() => process.exit());
+connect().then(() => process.exit());
