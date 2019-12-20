@@ -1,3 +1,5 @@
 src/serviceWorker.ts
 src/**/__tests__/**
 coverage
+./database.sqlite
+database.sqlite

@@ -7,6 +7,7 @@ import {
     UserInputError,
 } from 'apollo-server-express';
 import { createSchema } from './utils/createSchema';
+import cors from 'cors';
 // import { createDeploymentsLoader } from './utils/deploymentsLoader';
 /**
  * Initializing our apps
@@ -16,6 +17,7 @@ import { createSchema } from './utils/createSchema';
  */
 (async (): Promise<void> => {
     const app = express();
+    app.use(cors);
 
     const options = await getConnectionOptions(
         process.env.NODE_ENV || 'development'
