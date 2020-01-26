@@ -17,7 +17,7 @@ import cors from 'cors';
  */
 (async (): Promise<void> => {
     const app = express();
-    app.use(cors);
+    app.use(cors());
 
     const options = await getConnectionOptions(
         process.env.NODE_ENV || 'development'
