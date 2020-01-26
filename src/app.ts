@@ -17,7 +17,7 @@ import cors from 'cors';
  */
 (async (): Promise<void> => {
     const app = express();
-    app.use(cors);
+    app.use(cors());
 
     const options = await getConnectionOptions(
         process.env.NODE_ENV || 'development'
@@ -43,7 +43,7 @@ import cors from 'cors';
         },
     });
 
-    apolloServer.applyMiddleware({ app, cors: false });
+    apolloServer.applyMiddleware({ app, cors: true });
 
     const port = process.env.PORT || 4000;
 
