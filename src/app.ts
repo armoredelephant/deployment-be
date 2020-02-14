@@ -8,7 +8,6 @@ import {
 } from 'apollo-server-express';
 import { createSchema } from './utils/createSchema';
 import cors from 'cors';
-// import { createDeploymentsLoader } from './utils/deploymentsLoader';
 /**
  * Initializing our apps
  * Creating a schema with buildSchema and feeding to apollo
@@ -31,7 +30,6 @@ import cors from 'cors';
         context: ({ req, res }) => ({
             req,
             res,
-            // deploymentsLoader: createDeploymentsLoader(), // called frm deploymentsLoader
         }),
         formatError: (err: Error): Error => {
             if (err.message.startsWith('Field ')) {
