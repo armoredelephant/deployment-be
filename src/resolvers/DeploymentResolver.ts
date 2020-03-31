@@ -36,6 +36,9 @@ export class DeploymentInput {
     serialNumber: string;
 
     @Field()
+    asset: string;
+
+    @Field()
     timeStamp: string;
 
     @Field(() => Int)
@@ -62,6 +65,9 @@ export class DeploymentArgsType {
 
     @Field({ nullable: true })
     serialNumber?: string;
+
+    @Field({ nullable: true })
+    asset?: string;
 
     @Field({ nullable: true })
     timeStamp?: string;
@@ -117,6 +123,7 @@ export class DeploymentResolver {
             product,
             modelType,
             serialNumber,
+            asset,
             timeStamp,
             techId,
             ticketNumber,
@@ -138,6 +145,9 @@ export class DeploymentResolver {
         }
         if (serialNumber) {
             options.serialNumber = serialNumber;
+        }
+        if (asset) {
+            options.asset = asset;
         }
         if (timeStamp) {
             options.timeStamp = timeStamp;

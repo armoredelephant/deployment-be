@@ -22,6 +22,7 @@ const invalidDeploymentData = {
     product: faker.name.firstName(),
     modelType: faker.name.firstName(),
     serialNumber: faker.name.firstName(),
+    asset: faker.name.firstName(),
 };
 
 const deploymentData = {
@@ -30,6 +31,7 @@ const deploymentData = {
     product: 'Test',
     modelType: 'Test',
     serialNumber: 'Test',
+    asset: 'Test',
     timeStamp: 'Test',
     techId: 1,
     ticketNumber: 111111,

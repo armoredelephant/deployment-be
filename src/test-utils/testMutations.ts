@@ -7,6 +7,7 @@ export const createDeploymentMutation = `
         product
         modelType
         serialNumber
+        asset
         timeStamp
         techId
         ticketNumber

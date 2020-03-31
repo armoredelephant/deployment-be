@@ -47,6 +47,10 @@ export class Deployment extends BaseEntity {
 
     @Field()
     @Column({ nullable: false })
+    asset: string;
+
+    @Field()
+    @Column({ nullable: false })
     timeStamp: string;
 
     @Field()
